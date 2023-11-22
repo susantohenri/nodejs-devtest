@@ -1,11 +1,15 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+const { query, validationResult } = require('express-validator');
+const app = express();
 
-app.get('/health-check', (req, res) => {
-    res.sendStatus(200)
-})
+app.use(express.json());
+app.get('/health-check', [query('person').notEmpty(), query('email').isEmail()], (req, res) => {
+  const result = validationResult(req);
+  if (result.isEmpty()) {
+    return res.send(`Hello, ${req.query.person}!`);
+  }
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+  res.send({ errors: result.array() });
+});
+
+app.listen(3000);
