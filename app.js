@@ -1,11 +1,15 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require(`express`)
+const { authGenerateToken } = require(`./routes/auth.route`)
 
-app.get('/health-check', (req, res) => {
+const app = express()
+app.use(express.urlencoded({ extended: true }))
+
+app.get(`/health-check`, (req, res) => {
     res.sendStatus(200)
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+app.post(`/auth`, authGenerateToken)
+
+app.listen(3000, () => {
+    console.log(`App is running`)
 })
