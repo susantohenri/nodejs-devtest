@@ -12,7 +12,7 @@ const generate = (client_id) => {
 
 const validate = (token) => {
     return jwt.verify(token, config.secret_key, (error, user) => {
-        return user.client_id == config.client_id && user.exp > Math.floor(Date.now() / 1000)
+        return undefined === user ? false : user.client_id == config.client_id && user.exp > Math.floor(Date.now() / 1000)
     })
 }
 

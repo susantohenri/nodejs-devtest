@@ -1,4 +1,4 @@
-const { generate } = require(`../services/auth.service`)
+const { generate, validate } = require(`../services/auth.service`)
 
 const authGenerateToken = (req, res, next) => {
     try {
@@ -10,4 +10,16 @@ const authGenerateToken = (req, res, next) => {
 
 }
 
-module.exports = { authGenerateToken }
+const authValidateToken = (req, res, next) => {
+    const authHeader = req.headers.authorization
+    if (authHeader) {
+        const token = authHeader.split(` `)[1]
+        const isAuthorized = validate(token)
+        if (isAuthorized) next()
+        else res.status(401).json({ error: `request unauthorized` })
+    } else {
+        res.status(401).json({ error: `request unauthorized` })
+    }
+}
+
+module.exports = { authGenerateToken, authValidateToken }

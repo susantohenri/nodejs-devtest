@@ -1,6 +1,6 @@
 const { generate, validate, config } = require(`../services/auth.service`);
 
-test('success: generate token', () => {
+test(`success: generate token`, () => {
     const token = generate(config.client_id)
     expect(validate(token)).toBe(true)
 })
